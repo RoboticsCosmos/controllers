@@ -10,6 +10,7 @@ set(CMAKE_INSTALL_DIR share/${PROJECT_NAME}/cmake)
 # includes
 include_directories(
   include
+  ${orocos_kdl_INCLUDE_DIRS}
 )
 
 # export library
@@ -19,7 +20,6 @@ add_library(pid_controller SHARED
 
 # link libraries
 target_link_libraries(pid_controller
-  ${orocos_kdl_LIBRARIES}
 )
 
 # install
