@@ -28,34 +28,14 @@
 #ifndef PID_CONTROLLER_HPP
 #define PID_CONTROLLER_HPP
 
-#include <array>
-#include <iostream>
-#include <tuple>
-#include <vector>
-
-#include "kdl/frames.hpp"
-#include "kdl/jntarray.hpp"
-
 /**
  * @brief Compute the proportional term of the PID controller.
  * @param current The current value of the system.
  * @param target The desired target value.
  * @param Kp The proportional gain.
- * @return The proportional term of the PID controller.
+ * @param signal The proportional term of the PID controller.
  */
-double computeProportionalTerm(const double current, const double target,
-                               const double Kp, const double threshold = 0.0);
-
-/**
- * @brief Compute the proportional term of the PID controller.
- * @param current The current value of the system.
- * @param target The desired target value.
- * @param Kp The proportional gain.
- * @return The proportional term of the PID controller.
- */
-KDL::Vector computeProportionalTerm(const KDL::Vector& current,
-                                    const KDL::Vector& target, const double Kp,
-                                    const KDL::Vector& threshold);
+void computeProportionalTerm(double error, double Kp, double& signal);
 
 /**
  * @brief Compute the integral term of the PID controller.
@@ -64,25 +44,9 @@ KDL::Vector computeProportionalTerm(const KDL::Vector& current,
  * @param Ki The integral gain.
  * @param dt The time step.
  * @param error_sum The accumulated error.
- * @return The integral term of the PID controller.
+ * @param signal The integral term of the PID controller.
  */
-double computeIntegralTerm(const double current, const double target,
-                           const double Ki, const double dt,
-                           const double threshold, double& error_sum);
-
-/**
- * @brief Compute the integral term of the PID controller.
- * @param current The current value of the system.
- * @param target The desired target value.
- * @param Ki The integral gain.
- * @param dt The time step.
- * @param error_sum The accumulated error.
- * @return The integral term of the PID controller.
- */
-KDL::Vector computeIntegralTerm(const KDL::Vector& current,
-                                const KDL::Vector& target, const double Ki,
-                                const double dt, const double threshold,
-                                KDL::Vector& error_sum);
+void computeIntegralTerm(double error, double Ki, double dt, double& error_sum, double& signal);
 
 /**
  * @brief Compute the derivative term of the PID controller.
@@ -91,35 +55,11 @@ KDL::Vector computeIntegralTerm(const KDL::Vector& current,
  * @param Kd The derivative gain.
  * @param dt The time step.
  * @param last_error The previous error.
- * @return The derivative term of the PID controller.
+ * @param signal The derivative term of the PID controller.
  */
-double computeDerivativeTerm(const double current, const double target,
-                             const double Kd, const double dt,
-                             const double threshold, double& last_error);
-/**
- * @brief Compute the derivative term of the PID controller.
- * @param current The current value of the system.
- * @param target The desired target value.
- * @param Kd The derivative gain.
- * @param dt The time step.
- * @param last_error The previous error.
- * @return The derivative term of the PID controller.
- */
-KDL::Vector computeDerivativeTerm(const KDL::Vector& current,
-                                  const KDL::Vector& target, const double Kd,
-                                  const double dt, const KDL::Vector& threshold,
-                                  KDL::Vector& last_error);
+void computeDerivativeTerm(double error, double Kd, double dt, double& last_error, double& signal);
 
-/**
- * @brief Calculates the error between two vectors.
- *
- * @param in1 The first vector.
- * @param in2 The second vector.
- * @param threshold The threshold vector for the error.
- * @return The error as a kdl vector.
- */
-KDL::Vector calc_error(const KDL::Vector& in1, const KDL::Vector& in2,
-                       const KDL::Vector& threshold);
+void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum, double& last_error, double& signal);
 
 /**
  * @brief Calculates the error between two vectors.
@@ -127,9 +67,8 @@ KDL::Vector calc_error(const KDL::Vector& in1, const KDL::Vector& in2,
  * @param in1 The first double.
  * @param in2 The second double.
  * @param threshold The threshold for the error.
- * @return The error as a doble.
+ * @param out The error as a doble.
  */
-double calc_error(const double& in1, const double& in2,
-                  const double& threshold = 0.0);
+void computeError(double in1, double in2, double threshold = 0.0, double& out);
 
 #endif /* PID_CONTROLLER_HPP */

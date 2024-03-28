@@ -27,57 +27,35 @@
 
 #include "controllers/pid_controller.hpp"
 
-double computeProportionalTerm(const double current, const double target,
-                               const double Kp, const double threshold) {
-  return Kp * calc_error(current, target, threshold);
+void computeProportionalTerm(double error, double Kp, double& signal)
+{
+  signal = Kp * error;
 }
 
-KDL::Vector computeProportionalTerm(const KDL::Vector& current,
-                                    const KDL::Vector& target, const double Kp,
-                                    const KDL::Vector& threshold) {
-  return Kp * calc_error(current, target, threshold);
+void computeIntegralTerm(double error, double Ki, double dt, double& error_sum, double& signal)
+{
+  error_sum += error * dt;
+  signal = Ki * error_sum;
 }
 
-double computeIntegralTerm(const double current, const double target,
-                           const double Ki, const double dt,
-                           const double threshold, double& error_sum) {
-  error_sum += calc_error(current, target, threshold) * dt;
-  return Ki * error_sum;
+void computeDerivativeTerm(double error, double Kd, double dt, double& last_error, double& signal)
+{
+  double derivative = (error - last_error) / dt;
+  last_error = error;
+  signal = Kd * derivative;
 }
 
-KDL::Vector computeIntegralTerm(const KDL::Vector& current,
-                                const KDL::Vector& target, const double Ki,
-                                const double dt, const KDL::Vector& threshold,
-                                KDL::Vector& error_sum) {
-  error_sum += calc_error(current, target, threshold) * dt;
-  return Ki * error_sum;
+void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum,
+                   double& last_error, double& signal)
+{
+  double proportional, integral, derivative;
+  computeProportionalTerm(error, Kp, proportional);
+  computeIntegralTerm(error, Ki, dt, error_sum, integral);
+  computeDerivativeTerm(error, Kd, dt, last_error, derivative);
+  signal = proportional + integral + derivative;
 }
 
-double computeDerivativeTerm(const double current, const double target,
-                             const double Kd, const double dt,
-                             const double threshold, double& last_error) {
-  double current_error = calc_error(current, target, threshold);
-  double derivative = (current_error - last_error) / dt;
-  last_error = current_error;
-  return Kd * derivative;
-}
-
-KDL::Vector computeDerivativeTerm(const KDL::Vector& current,
-                                  const KDL::Vector& target, const double Kd,
-                                  const double dt, const KDL::Vector& threshold,
-                                  KDL::Vector& last_error) {
-  KDL::Vector current_error = calc_error(current, target, threshold);
-  KDL::Vector derivative = (current_error - last_error) / dt;
-  last_error = current_error;
-  return Kd * derivative;
-}
-
-KDL::Vector calc_error(const KDL::Vector& in1, const KDL::Vector& in2,
-                       const KDL::Vector& threshold) {
-  return in1 - in2 - threshold;
-}
-
-double calc_error(const double& in1, const double& in2,
-                  const double& threshold) {
-  return in1 - in2 - threshold;
+void computeError(const double& in1, const double& in2, const double& threshold, double& out)
+{
+  out = in1 - in2 - threshold;
 }
