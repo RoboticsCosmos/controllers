@@ -48,14 +48,14 @@ void computeDerivativeTerm(double error, double Kd, double dt, double& last_erro
 void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum,
                    double& last_error, double& signal)
 {
-  double proportional, integral, derivative;
+  double proportional, integral, derivative = 0.0;
   computeProportionalTerm(error, Kp, proportional);
   computeIntegralTerm(error, Ki, dt, error_sum, integral);
   computeDerivativeTerm(error, Kd, dt, last_error, derivative);
   signal = proportional + integral + derivative;
 }
 
-void computeError(const double& in1, const double& in2, const double& threshold, double& out)
+void computeError(double in1, double in2, double threshold, double& out)
 {
-  out = in1 - in2 - threshold;
+  out = in2 - in1 - threshold;
 }
