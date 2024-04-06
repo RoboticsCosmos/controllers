@@ -55,7 +55,7 @@ void pidController(double error, double Kp, double Ki, double Kd, double dt, dou
   signal = proportional + integral + derivative;
 }
 
-void computeError(double in1, double in2, double threshold, double& out)
+void computeError(double in1, double in2, double& out)
 {
-  out = in2 - in1 - threshold;
+  out = in2 - in1;
 }

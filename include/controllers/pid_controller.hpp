@@ -66,9 +66,8 @@ void pidController(double error, double Kp, double Ki, double Kd, double dt, dou
  *
  * @param in1 The first double.
  * @param in2 The second double.
- * @param threshold The threshold for the error.
  * @param out The error as a doble.
  */
-void computeError(double in1, double in2, double threshold, double& out);
+void computeError(double in1, double in2, double& out);
 
 #endif /* PID_CONTROLLER_HPP */
