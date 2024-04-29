@@ -62,12 +62,12 @@ void computeDerivativeTerm(double error, double Kd, double dt, double& last_erro
 void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum, double& last_error, double& signal);
 
 /**
- * @brief Calculates the error between two vectors.
+ * @brief Calculates the equality error between two vectors.
  *
  * @param in1 The first double.
  * @param in2 The second double.
  * @param out The error as a doble.
  */
-void computeError(double in1, double in2, double& out);
+void computeEqualityError(double in1, double in2, double& out);
 
 #endif /* PID_CONTROLLER_HPP */
