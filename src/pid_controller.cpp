@@ -55,6 +55,14 @@ void pidController(double error, double Kp, double Ki, double Kd, double dt, dou
   signal = proportional + integral + derivative;
 }
 
+void impedanceController(double stiffnessError, double dampingError,
+                         double* stiffness_diag_mat, double* damping_diag_mat,
+                         double& signal)
+{
+  // *Assumption: diagonal matrices are of size 1x1 - 1d control
+  signal = stiffness_diag_mat[0] * stiffnessError + damping_diag_mat[0] * dampingError;
+}
+
 void computeEqualityError(double in1, double in2, double& out)
 {
   out = in2 - in1;
