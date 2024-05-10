@@ -31,9 +31,27 @@ install(
   RUNTIME DESTINATION bin
 )
 
-install(DIRECTORY include/
-  DESTINATION include
-  FILES_MATCHING PATTERN "*.hpp"
+# Generate the CMake config file
+include(CMakePackageConfigHelpers)
+# Generate the version file accompanying the project's config file
+configure_package_config_file(${PROJECT_NAME}-config.cmake.in
+                              ${PROJECT_NAME}-config.cmake
+                              INSTALL_DESTINATION ${CMAKE_INSTALL_DIR})
+
+write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
+                                 VERSION ${PROJECT_VERSION}
+                                 COMPATIBILITY AnyNewerVersion)
+
+# Install the config and configversion
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
+        DESTINATION ${CMAKE_INSTALL_DIR})
+
+# Make the targets accessible from this packages's build tree
+export(
+  EXPORT ${PROJECT_NAME}-targets
+  NAMESPACE ${PROJECT_NAME}::
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-targets.cmake"
 )
 
 # Make the targets accessible from this packages's install tree
@@ -43,18 +61,8 @@ install(
   NAMESPACE ${PROJECT_NAME}::
   DESTINATION ${CMAKE_INSTALL_DIR})
 
-# Generate the CMake config file
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
-                                 VERSION ${PROJECT_VERSION}
-                                 COMPATIBILITY AnyNewerVersion)
-
-# Generate the version file accompanying the project's config file
-configure_package_config_file(${PROJECT_NAME}-config.cmake.in
-                              ${PROJECT_NAME}-config.cmake
-                              INSTALL_DESTINATION ${CMAKE_INSTALL_DIR})
-
-# Install the config and configversion
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
-        DESTINATION ${CMAKE_INSTALL_DIR})
+# Install all public header files
+install(DIRECTORY include/
+  DESTINATION include
+  FILES_MATCHING PATTERN "*.hpp"
+)
