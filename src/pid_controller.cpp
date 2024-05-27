@@ -35,6 +35,17 @@ void computeProportionalTerm(double error, double Kp, double& signal)
 void computeIntegralTerm(double error, double Ki, double dt, double& error_sum, double& signal)
 {
   error_sum += error * dt;
+
+  double error_sum_tol = 1.0;
+  if (error_sum > error_sum_tol)
+  {
+    error_sum = error_sum_tol;
+  }
+  else if (error_sum < -error_sum_tol)
+  {
+    error_sum = -error_sum_tol;
+  }
+
   signal = Ki * error_sum;
 }
 
