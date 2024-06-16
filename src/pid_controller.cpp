@@ -66,9 +66,17 @@ void pidController(double error, double Kp, double Ki, double Kd, double dt, dou
   signal = proportional + integral + derivative;
 }
 
-void impedanceController(double stiffnessError, double dampingError,
-                         double* stiffness_diag_mat, double* damping_diag_mat,
-                         double& signal)
+void pidController(double* error, double Kp, double Ki, double Kd, double dt, double* error_sum,
+                   double* last_error, double* signal, int size)
+{
+  for (int i = 0; i < size; i++)
+  {
+    pidController(error[i], Kp, Ki, Kd, dt, error_sum[i], last_error[i], signal[i]);
+  }
+}
+
+void impedanceController(double stiffnessError, double dampingError, double* stiffness_diag_mat,
+                         double* damping_diag_mat, double& signal)
 {
   // *Assumption: diagonal matrices are of size 1x1 - 1d control
   signal = stiffness_diag_mat[0] * stiffnessError + damping_diag_mat[0] * dampingError;
