@@ -46,7 +46,8 @@ void computeProportionalTerm(double error, double Kp, double& signal);
  * @param error_sum The accumulated error.
  * @param signal The integral term of the PID controller.
  */
-void computeIntegralTerm(double error, double Ki, double dt, double& error_sum, double& signal);
+void computeIntegralTerm(double error, double Ki, double dt, double& error_sum,
+                         double error_sum_tol, double& signal);
 
 /**
  * @brief Compute the derivative term of the PID controller.
@@ -60,10 +61,10 @@ void computeIntegralTerm(double error, double Ki, double dt, double& error_sum, 
 void computeDerivativeTerm(double error, double Kd, double dt, double& last_error, double& signal);
 
 void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum,
-                   double& last_error, double& signal);
+                   double error_sum_tol, double& last_error, double& signal);
 
 void pidController(double* error, double Kp, double Ki, double Kd, double dt, double* error_sum,
-                   double* last_error, double* signal, int size);
+                   double error_sum_tol, double* last_error, double* signal, int size);
 
 /**
  * @brief Calculates the equality error between two vectors.

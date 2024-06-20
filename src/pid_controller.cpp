@@ -32,11 +32,22 @@ void computeProportionalTerm(double error, double Kp, double& signal)
   signal = Kp * error;
 }
 
-void computeIntegralTerm(double error, double Ki, double dt, double& error_sum, double& signal)
+void computeIntegralTerm(double error, double Ki, double dt, double& error_sum,
+                         double error_sum_tol, double& signal)
 {
+  // if (error_sum_tol == 0.0)
+  // {
+  //   error_sum_tol = 1.0;
+  // }
+  // else if (error_sum_tol < -10.0 || error_sum_tol > 10.0)
+  // {
+  //   error_sum_tol = 10.0;
+  // }
+
+  // error_sum_tol = 1.0;
+  
   error_sum += error * dt;
 
-  double error_sum_tol = 1.0;
   if (error_sum > error_sum_tol)
   {
     error_sum = error_sum_tol;
@@ -57,21 +68,21 @@ void computeDerivativeTerm(double error, double Kd, double dt, double& last_erro
 }
 
 void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum,
-                   double& last_error, double& signal)
+                   double error_sum_tol, double& last_error, double& signal)
 {
   double proportional, integral, derivative = 0.0;
   computeProportionalTerm(error, Kp, proportional);
-  computeIntegralTerm(error, Ki, dt, error_sum, integral);
+  computeIntegralTerm(error, Ki, dt, error_sum, error_sum_tol, integral);
   computeDerivativeTerm(error, Kd, dt, last_error, derivative);
   signal = proportional + integral + derivative;
 }
 
 void pidController(double* error, double Kp, double Ki, double Kd, double dt, double* error_sum,
-                   double* last_error, double* signal, int size)
+                   double error_sum_tol, double* last_error, double* signal, int size)
 {
   for (int i = 0; i < size; i++)
   {
-    pidController(error[i], Kp, Ki, Kd, dt, error_sum[i], last_error[i], signal[i]);
+    pidController(error[i], Kp, Ki, Kd, dt, error_sum[i], error_sum_tol, last_error[i], signal[i]);
   }
 }
 
