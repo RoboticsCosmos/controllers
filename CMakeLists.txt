@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.15.0)
 project(controllers VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -22,9 +22,13 @@ add_library(pid_controller SHARED
 target_link_libraries(pid_controller
 )
 
+add_library(abag_controller
+  src/abag.c
+)
+
 # install
 install(
-  TARGETS pid_controller
+  TARGETS pid_controller abag_controller
   EXPORT ${PROJECT_NAME}-targets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
@@ -64,5 +68,5 @@ install(
 # Install all public header files
 install(DIRECTORY include/
   DESTINATION include
-  FILES_MATCHING PATTERN "*.hpp"
+  FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h"
 )
