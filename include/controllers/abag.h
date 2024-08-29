@@ -1,3 +1,7 @@
+/**
+ * Author: Djordje Vukcevic
+*/
+
 #ifndef ABAG_H
 #define ABAG_H
 #include <math.h>

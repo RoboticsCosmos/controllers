@@ -1,3 +1,6 @@
+/**
+ * Author: Djordje Vukcevic
+*/
 #include "controllers/abag.h"
 
 /* functions to initialize structs of DataBlockContainer's */
