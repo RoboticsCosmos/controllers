@@ -28,6 +28,10 @@
 #ifndef PID_CONTROLLER_HPP
 #define PID_CONTROLLER_HPP
 
+#include <cmath>
+
+double applyDeadZone(double error, double dead_zone);
+
 /**
  * @brief Compute the proportional term of the PID controller.
  * @param current The current value of the system.
@@ -49,6 +53,9 @@ void computeProportionalTerm(double error, double Kp, double& signal);
 void computeIntegralTerm(double error, double Ki, double dt, double& error_sum,
                          double error_sum_tol, double& signal);
 
+void computeIntegralTerm(double error, double Ki, double dt, double& error_sum,
+                         double error_sum_tol, double decay_rate, double& signal);
+
 /**
  * @brief Compute the derivative term of the PID controller.
  * @param current The current value of the system.
@@ -60,8 +67,15 @@ void computeIntegralTerm(double error, double Ki, double dt, double& error_sum,
  */
 void computeDerivativeTerm(double error, double Kd, double dt, double& last_error, double& signal);
 
+void computeDerivativeTerm(double error, double Kd, double dt, double& last_error,
+                           double smoothing_factor, double& signal);
+
 void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum,
                    double error_sum_tol, double& last_error, double& signal);
+
+void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum,
+                   double error_sum_tol, double& last_error, double decay_rate, double dead_zone,
+                   double smoothing_factor, double& signal, bool debug = false);
 
 void pidController(double* error, double Kp, double Ki, double Kd, double dt, double* error_sum,
                    double error_sum_tol, double* last_error, double* signal, int size);
@@ -77,5 +91,7 @@ void computeEqualityError(double in1, double in2, double& out);
 
 void impedanceController(double stiffnessError, double dampingError, double* stiffness_diag_mat,
                          double* damping_diag_mat, double& signal);
+
+void computeInBetweenError(double measured, double upperLimit, double lowerLimit, double& out);
 
 #endif /* PID_CONTROLLER_HPP */
