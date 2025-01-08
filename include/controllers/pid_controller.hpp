@@ -74,7 +74,7 @@ void pidController(double error, double Kp, double Ki, double Kd, double dt, dou
                    double error_sum_tol, double& last_error, double& signal);
 
 void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum,
-                   double error_sum_tol, double& last_error, double decay_rate, double dead_zone,
+                   double error_sum_tol, double& last_error, double decay_rate,
                    double smoothing_factor, double& signal, bool debug = false);
 
 void pidController(double* error, double Kp, double Ki, double Kd, double dt, double* error_sum,

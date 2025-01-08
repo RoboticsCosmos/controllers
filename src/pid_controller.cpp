@@ -123,13 +123,10 @@ void computeDerivativeTerm(double error, double Kd, double dt, double& last_erro
 }
 
 void pidController(double error, double Kp, double Ki, double Kd, double dt, double& error_sum,
-                   double error_sum_tol, double& last_error, double decay_rate, double dead_zone,
+                   double error_sum_tol, double& last_error, double decay_rate,
                    double smoothing_factor, double& signal, bool debug)
 {
   double proportional, integral, derivative = 0.0;
-
-  // Apply dead zone to the error
-  error = applyDeadZone(error, dead_zone);
 
   // Compute terms
   computeProportionalTerm(error, Kp, proportional);
